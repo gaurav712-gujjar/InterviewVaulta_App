@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InterviewVault — Tech Interview Prep</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #18181f;
+      --border: rgba(255,255,255,0.07);
+      --border-bright: rgba(255,255,255,0.15);
+      --accent: #7c6aff;
+      --accent2: #ff6a9a;
+      --accent3: #6affd4;
+      --text: #e8e8f0;
+      --text-muted: #6b6b80;
+      --text-dim: #9898aa;
+      --infosys: #00c2d1;
+      --wipro: #a78bfa;
+      --tcs: #fb923c;
+      --general: #4ade80;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Mono', monospace;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 10%, rgba(124,106,255,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 80% 80%, rgba(106,255,212,0.07) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 30% at 60% 20%, rgba(255,106,154,0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* Grid lines */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* ── HEADER ── */
+    header {
+      padding: 40px 0 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 60px;
+    }
+
+    .header-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+
+    .logo {
+      display: flex; align-items: baseline; gap: 8px;
+    }
+    .logo-mark {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.6rem;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+    .logo-mark span { color: var(--accent); }
+    .logo-tag {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border: 1px solid var(--border-bright);
+      padding: 2px 8px;
+      border-radius: 100px;
+    }
+
+    .header-stats {
+      display: flex; gap: 24px;
+    }
+    .stat {
+      text-align: right;
+    }
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent3);
+      line-height: 1;
+    }
+    .stat-label { font-size: 0.65rem; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* ── HERO ── */
+    .hero { text-align: center; margin-bottom: 64px; }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      padding: 6px 16px;
+      border: 1px solid rgba(124,106,255,0.3);
+      border-radius: 100px;
+      background: rgba(124,106,255,0.08);
+    }
+
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    .hero h1 em { font-style: italic; color: var(--accent2); }
+
+    .hero p {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      max-width: 480px;
+      margin: 0 auto 40px;
+      line-height: 1.8;
+    }
+
+    /* ── SEARCH ── */
+    .search-wrapper {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: var(--surface);
+      border: 1px solid var(--border-bright);
+      border-radius: 16px;
+      padding: 6px 6px 6px 20px;
+      gap: 10px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-box:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(124,106,255,0.15), 0 0 40px rgba(124,106,255,0.08);
+    }
+
+    .search-icon { color: var(--text-muted); font-size: 1rem; flex-shrink: 0; }
+
+    #skillInput {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 1rem;
+      color: var(--text);
+      padding: 12px 0;
+    }
+    #skillInput::placeholder { color: var(--text-muted); }
+
+    .search-btn {
+      background: var(--accent);
+      border: none;
+      border-radius: 12px;
+      padding: 14px 28px;
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .search-btn:hover { background: #9580ff; transform: translateY(-1px); }
+    .search-btn:active { transform: translateY(0); }
+
+    /* ── FILTER PILLS ── */
+    .filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      align-items: center;
+    }
+    .filter-label { font-size: 0.65rem; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; margin-right: 4px; }
+
+    .company-pill {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      border: 1px solid var(--border-bright);
+      background: transparent;
+      color: var(--text-dim);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .company-pill.active { color: #fff; }
+    .company-pill[data-company="Infosys"].active { border-color: var(--infosys); background: rgba(0,194,209,0.12); color: var(--infosys); }
+    .company-pill[data-company="Wipro"].active { border-color: var(--wipro); background: rgba(167,139,250,0.12); color: var(--wipro); }
+    .company-pill[data-company="TCS"].active { border-color: var(--tcs); background: rgba(251,146,60,0.12); color: var(--tcs); }
+    .company-pill[data-company="General"].active { border-color: var(--general); background: rgba(74,222,128,0.12); color: var(--general); }
+    .company-pill:not(.active):hover { border-color: var(--border-bright); color: var(--text); }
+
+    .pill-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    /* ── SKILL CHIPS ── */
+    .skill-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 48px;
+      justify-content: center;
+    }
+    .skill-chip {
+      padding: 8px 16px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-dim);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .skill-chip:hover { border-color: var(--accent); color: var(--accent); background: rgba(124,106,255,0.08); transform: translateY(-1px); }
+
+    /* ── RESULTS ── */
+    #results { margin-top: 48px; }
+
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap; gap: 12px;
+    }
+
+    .results-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .results-icon { font-size: 1.6rem; }
+    .results-badge {
+      font-size: 0.75rem;
+      padding: 4px 12px;
+      background: rgba(124,106,255,0.15);
+      border: 1px solid rgba(124,106,255,0.3);
+      border-radius: 100px;
+      color: var(--accent);
+    }
+
+    .copy-all-btn {
+      background: transparent;
+      border: 1px solid var(--border-bright);
+      border-radius: 8px;
+      padding: 8px 16px;
+      color: var(--text-dim);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .copy-all-btn:hover { border-color: var(--accent3); color: var(--accent3); }
+
+    .company-section { margin-bottom: 40px; }
+
+    .company-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-radius: 12px 12px 0 0;
+      margin-bottom: 0;
+    }
+    .company-header[data-company="Infosys"] { background: rgba(0,194,209,0.08); border: 1px solid rgba(0,194,209,0.2); border-bottom: none; }
+    .company-header[data-company="Wipro"] { background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.2); border-bottom: none; }
+    .company-header[data-company="TCS"] { background: rgba(251,146,60,0.08); border: 1px solid rgba(251,146,60,0.2); border-bottom: none; }
+    .company-header[data-company="General"] { background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.2); border-bottom: none; }
+
+    .company-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .company-name[data-company="Infosys"] { color: var(--infosys); }
+    .company-name[data-company="Wipro"] { color: var(--wipro); }
+    .company-name[data-company="TCS"] { color: var(--tcs); }
+    .company-name[data-company="General"] { color: var(--general); }
+
+    .company-count {
+      font-size: 0.7rem;
+      font-family: 'DM Mono', monospace;
+      color: var(--text-muted);
+    }
+
+    .questions-list {
+      background: var(--surface);
+      border-radius: 0 0 12px 12px;
+      overflow: hidden;
+    }
+    .company-header[data-company="Infosys"] + .questions-list { border: 1px solid rgba(0,194,209,0.2); border-top: none; }
+    .company-header[data-company="Wipro"] + .questions-list { border: 1px solid rgba(167,139,250,0.2); border-top: none; }
+    .company-header[data-company="TCS"] + .questions-list { border: 1px solid rgba(251,146,60,0.2); border-top: none; }
+    .company-header[data-company="General"] + .questions-list { border: 1px solid rgba(74,222,128,0.2); border-top: none; }
+
+    .question-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+      cursor: pointer;
+      position: relative;
+    }
+    .question-item:last-child { border-bottom: none; }
+    .question-item:hover { background: rgba(255,255,255,0.03); }
+
+    .q-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      min-width: 28px;
+      padding-top: 2px;
+    }
+
+    .q-text {
+      flex: 1;
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: var(--text);
+    }
+    .q-text code {
+      background: rgba(124,106,255,0.1);
+      border: 1px solid rgba(124,106,255,0.2);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.83em;
+      color: var(--accent);
+    }
+
+    .q-copy {
+      opacity: 0;
+      background: transparent;
+      border: 1px solid var(--border-bright);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+      flex-shrink: 0;
+      font-family: 'DM Mono', monospace;
+    }
+    .question-item:hover .q-copy { opacity: 1; }
+    .q-copy:hover { border-color: var(--accent3); color: var(--accent3); }
+    .q-copy.copied { color: var(--accent3); border-color: var(--accent3); opacity: 1; }
+
+    /* ── ERROR ── */
+    .error-box {
+      background: rgba(255,100,100,0.08);
+      border: 1px solid rgba(255,100,100,0.25);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      color: #ff8080;
+      font-size: 0.9rem;
+    }
+
+    /* ── LOADING ── */
+    .loading {
+      text-align: center;
+      padding: 48px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    .loading-dots span {
+      animation: blink 1.2s infinite;
+      font-size: 1.5rem;
+    }
+    .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes blink { 0%,80%,100%{opacity:0.2} 40%{opacity:1} }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      text-align: center;
+      padding: 80px 24px;
+      color: var(--text-muted);
+    }
+    .empty-icon { font-size: 3rem; margin-bottom: 16px; }
+    .empty-title { font-family: 'Fraunces', serif; font-size: 1.5rem; color: var(--text-dim); margin-bottom: 8px; }
+    .empty-sub { font-size: 0.82rem; line-height: 1.7; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      background: var(--surface2);
+      border: 1px solid var(--border-bright);
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-size: 0.8rem;
+      color: var(--accent3);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s;
+      pointer-events: none;
+      z-index: 100;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 40px 0 24px;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.05em;
+      border-top: 1px solid var(--border);
+      margin-top: 80px;
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-in { animation: fadeIn 0.4s ease forwards; }
+    @keyframes fadeIn { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform:none; } }
+
+    .slide-in { animation: slideIn 0.35s ease forwards; }
+    .slide-in:nth-child(2) { animation-delay: 0.05s; }
+    .slide-in:nth-child(3) { animation-delay: 0.1s; }
+    .slide-in:nth-child(4) { animation-delay: 0.15s; }
+    @keyframes slideIn { from { opacity:0; transform: translateX(-10px); } to { opacity:1; transform:none; } }
+
+    @media (max-width: 600px) {
+      .header-stats { display: none; }
+      .hero h1 { font-size: 2rem; }
+      .search-box { flex-direction: column; align-items: stretch; padding: 12px; }
+      .search-btn { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-mark">Interview<span>Vault</span></div>
+        <div class="logo-tag">v1.0</div>
+      </div>
+      <div class="header-stats">
+        <div class="stat">
+          <div class="stat-num">3+</div>
+          <div class="stat-label">Companies</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">8</div>
+          <div class="stat-label">Skill Areas</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">200+</div>
+          <div class="stat-label">Questions</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">🎯 Tech Interview Prep Tool</div>
+    <h1>Crack your next<br/><em>technical interview</em></h1>
+    <p>Browse curated questions from Infosys, Wipro, TCS and more — organized by skill and company.</p>
+
+    <!-- SEARCH -->
+    <div class="search-wrapper">
+      <div class="search-box">
+        <span class="search-icon">⌕</span>
+        <input
+          type="text"
+          id="skillInput"
+          placeholder="Search skill — python, sql, machine learning..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button class="search-btn" onclick="fetchQuestions()">Search →</button>
+      </div>
+
+      <!-- COMPANY FILTERS -->
+      <div class="filters">
+        <span class="filter-label">Filter:</span>
+        <div class="company-pill active" data-company="Infosys" onclick="toggleCompany(this)">
+          <span class="pill-dot"></span> Infosys
+        </div>
+        <div class="company-pill active" data-company="Wipro" onclick="toggleCompany(this)">
+          <span class="pill-dot"></span> Wipro
+        </div>
+        <div class="company-pill active" data-company="TCS" onclick="toggleCompany(this)">
+          <span class="pill-dot"></span> TCS
+        </div>
+        <div class="company-pill active" data-company="General" onclick="toggleCompany(this)">
+          <span class="pill-dot"></span> General
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKILL QUICK-ACCESS -->
+  <div class="skill-chips">
+    <div class="skill-chip" onclick="quickSearch('python')">🐍 Python</div>
+    <div class="skill-chip" onclick="quickSearch('sql')">🗄️ SQL</div>
+    <div class="skill-chip" onclick="quickSearch('machine learning')">🤖 Machine Learning</div>
+    <div class="skill-chip" onclick="quickSearch('data science')">📊 Data Science</div>
+    <div class="skill-chip" onclick="quickSearch('data analysis')">🔍 Data Analysis</div>
+    <div class="skill-chip" onclick="quickSearch('data engineering')">⚙️ Data Engineering</div>
+    <div class="skill-chip" onclick="quickSearch('behavioral')">🧠 Behavioral / HR</div>
+    <div class="skill-chip" onclick="quickSearch('general technical')">💻 General Technical</div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results">
+    <div class="empty-state fade-in">
+      <div class="empty-icon">🔍</div>
+      <div class="empty-title">No results yet</div>
+      <div class="empty-sub">Type a skill above and hit <strong>Search</strong> —<br/>or click any quick-access chip to begin.</div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="container">
+    Built for job seekers · Infosys · Wipro · TCS · 2025
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const activeCompanies = new Set(['Infosys','Wipro','TCS','General']);
+
+  function toggleCompany(pill) {
+    const company = pill.dataset.company;
+    if (activeCompanies.has(company)) {
+      if (activeCompanies.size === 1) return; // keep at least 1
+      activeCompanies.delete(company);
+      pill.classList.remove('active');
+    } else {
+      activeCompanies.add(company);
+      pill.classList.add('active');
+    }
+    // If results showing, refresh
+    const skill = document.getElementById('skillInput').value;
+    if (skill && document.querySelector('.company-section')) fetchQuestions();
+  }
+
+  function quickSearch(skill) {
+    document.getElementById('skillInput').value = skill;
+    fetchQuestions();
+  }
+
+  document.getElementById('skillInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') fetchQuestions();
+  });
+
+  async function fetchQuestions() {
+    const skill = document.getElementById('skillInput').value.trim();
+    if (!skill) return;
+
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = `<div class="loading">
+      <div class="loading-dots"><span>●</span><span>●</span><span>●</span></div>
+      <div style="margin-top:12px;">Finding questions for <strong>${skill}</strong>...</div>
+    </div>`;
+
+    try {
+      const res = await fetch('/api/questions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ skill, companies: [...activeCompanies] })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        resultsDiv.innerHTML = `<div class="error-box fade-in">⚠️ ${data.error}</div>`;
+        return;
+      }
+
+      renderResults(data);
+    } catch (err) {
+      resultsDiv.innerHTML = `<div class="error-box fade-in">⚠️ Something went wrong. Please try again.</div>`;
+    }
+  }
+
+  function renderResults(data) {
+    const { skill, display_name, icon, companies, total } = data;
+
+    let html = `
+      <div class="results-header fade-in">
+        <div class="results-title">
+          <span class="results-icon">${icon}</span>
+          ${display_name} Questions
+          <span class="results-badge">${total} questions</span>
+        </div>
+        <button class="copy-all-btn" onclick="copyAll(event, ${JSON.stringify(companies).replace(/"/g,'&quot;')})">⎘ Copy All</button>
+      </div>
+    `;
+
+    const companyOrder = ['Infosys','Wipro','TCS','General'];
+    for (const company of companyOrder) {
+      if (!companies[company]) continue;
+      const qs = companies[company];
+      const qItems = qs.map((q, i) => {
+        const formatted = formatQuestion(q);
+        return `
+          <div class="question-item slide-in" onclick="copyQ(this, '${q.replace(/'/g,"\\'")}')">
+            <span class="q-num">Q${String(i+1).padStart(2,'0')}</span>
+            <span class="q-text">${formatted}</span>
+            <button class="q-copy" onclick="copyQ(this.parentElement, '${q.replace(/'/g,"\\'")}')">copy</button>
+          </div>`;
+      }).join('');
+
+      html += `
+        <div class="company-section">
+          <div class="company-header" data-company="${company}">
+            <span class="company-name" data-company="${company}">${companyDot(company)} ${company}</span>
+            <span class="company-count">${qs.length} questions</span>
+          </div>
+          <div class="questions-list">${qItems}</div>
+        </div>`;
+    }
+
+    document.getElementById('results').innerHTML = html;
+  }
+
+  function companyDot(company) {
+    const dots = { Infosys:'🔵', Wipro:'🟣', TCS:'🟠', General:'🟢' };
+    return dots[company] || '⚪';
+  }
+
+  function formatQuestion(q) {
+    // Wrap backtick content as <code>
+    return q.replace(/`([^`]+)`/g, '<code>$1</code>');
+  }
+
+  function copyQ(item, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = item.querySelector('.q-copy');
+      if (btn) { btn.textContent = '✓'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 1500); }
+      showToast('Question copied!');
+    });
+  }
+
+  function copyAll(e, companies) {
+    e.stopPropagation();
+    let all = [];
+    for (const [company, qs] of Object.entries(companies)) {
+      all.push(`=== ${company} ===`);
+      qs.forEach((q, i) => all.push(`${i+1}. ${q}`));
+      all.push('');
+    }
+    navigator.clipboard.writeText(all.join('\n')).then(() => showToast('All questions copied!'));
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = '✓ ' + msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+</script>
+</body>
+</html>
